@@ -6,11 +6,11 @@ public class MilledCoffee extends Coffee {
     private double weight;
 
 
-    public MilledCoffee(String sort, double weightOfCoffee, double cost, double weightOfPackage, String nameOfManufacturer) {
+    public MilledCoffee(String sort, double weightOfCoffee, double cost, double weightOfPackage, String nameOfManufacturer) throws WrongValueException {
         super(sort, weightOfCoffee, cost, nameOfManufacturer);
+        if (weightOfPackage <= 0) throw new WrongValueException();
         this.weightOfPackage = weightOfPackage;
         this.weight = weightOfPackage + weightOfCoffee;
-
     }
 
     @Override

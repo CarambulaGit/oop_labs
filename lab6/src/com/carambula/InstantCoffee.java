@@ -4,8 +4,9 @@ public class InstantCoffee extends Coffee {
     private double weightOfPackage;
     private double weight;
 
-    public InstantCoffee(String sort, double weightOfCoffee, double cost, double weightOfPackage, String nameOfManufacturer) {
+    public InstantCoffee(String sort, double weightOfCoffee, double cost, double weightOfPackage, String nameOfManufacturer) throws WrongValueException{
         super(sort, weightOfCoffee, cost, nameOfManufacturer);
+        if (weightOfPackage <= 0) throw new WrongValueException();
         this.weightOfPackage = weightOfPackage;
         this.weight = weightOfPackage + weightOfCoffee;
     }

@@ -19,10 +19,10 @@ public class MySet implements Set<Coffee> {
     }
 
     public Coffee[] getAllElements() {
-        return Arrays.copyOfRange(coffees,0, size);
+        return Arrays.copyOfRange(coffees, 0, size);
     }
 
-    public boolean increaseCapacity(float factor) {
+    public boolean increaseCapacity(double factor) {
         if (factor > 1) {
             Coffee[] temp = Arrays.copyOf(coffees, coffees.length);
             coffees = new Coffee[(int) (INITIAL_SIZE * factor)];
@@ -53,8 +53,16 @@ public class MySet implements Set<Coffee> {
     }
 
     @Override
+    public boolean containsAll(Collection<?> c) {
+        for (Object obj : c) {
+            if (!contains(obj)) return false;
+        }
+        return true;
+    }
+
+    @Override
     public Iterator<Coffee> iterator() {
-        return new Iterator<Coffee>() {
+        return new Iterator<>() {
             private int index = 0;
 
             @Override
@@ -81,11 +89,21 @@ public class MySet implements Set<Coffee> {
 
     @Override
     public boolean add(Coffee coffee) {
-        if (!this.contains(coffee) && size < coffees.length) {
+        if (!this.contains(coffee)) {
+            if (size >= coffees.length) {
+                increaseCapacity(1.3);
+            }
             coffees[size++] = coffee;
             return true;
         }
         return false;
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends Coffee> c) {
+        int sizeBeforeOperation = size;
+        c.forEach(this::add);
+        return sizeBeforeOperation != size;
     }
 
     @Override
@@ -103,19 +121,12 @@ public class MySet implements Set<Coffee> {
     }
 
     @Override
-    public boolean containsAll(Collection<?> c) {
-        for (Object obj : c) {
-            if (!contains(obj)) return false;
-        }
-        return true;
-    }
-
-    @Override
-    public boolean addAll(Collection<? extends Coffee> c) {
+    public boolean removeAll(Collection<?> c) {
         int sizeBeforeOperation = size;
-        c.forEach(this::add);
+        c.forEach(this::remove);
         return sizeBeforeOperation != size;
     }
+
 
     @Override
     public boolean retainAll(Collection<?> c) {
@@ -135,15 +146,12 @@ public class MySet implements Set<Coffee> {
         return sizeBeforeOperation != size;
     }
 
-    @Override
-    public boolean removeAll(Collection<?> c) {
-        int sizeBeforeOperation = size;
-        c.forEach(this::remove);
-        return sizeBeforeOperation != size;
-    }
 
     @Override
     public void clear() {
-        removeAll(Arrays.asList(coffees));
+        for (int i = 0; i < size; i++) {
+            coffees[i]= null;
+        }
+        size = 0;
     }
 }

@@ -28,7 +28,11 @@ public abstract class Coffee {
     private double quality;
     private String nameOfManufacturer;
 
-    public Coffee(String sort, double weightOfCoffee, double price, String nameOfManufacturer) {
+    public Coffee(String sort, double weightOfCoffee, double price, String nameOfManufacturer) throws WrongValueException {
+        if (sort == null) throw new WrongValueException();
+        if (weightOfCoffee <= 0) throw new WrongValueException();
+        if (price <= 0) throw new WrongValueException();
+        if (nameOfManufacturer == null) throw new WrongValueException();
         this.sort = sort;
         this.weightOfCoffee = weightOfCoffee;
         this.price = price;
